@@ -1,0 +1,105 @@
+1- Create another user in Oracle SQL Database (Other than "hr").
+	Steps to Create Another User in Oracle SQL Database:
+	a. Run Oracle SQL Developer as Administrator.
+	b. Open SQL*Plus and enter the following commands:
+		Username: sys as sysdba
+		Password: your SYS password
+
+Then, it will show that you are connected.
+
+	Run:
+		ALTER SESSION SET CONTAINER = ORCLPDB;
+	(This switches your current Oracle session to the pluggable database named ORCLPDB.)
+
+Then it will display: Session altered.
+
+	Run:
+		SHOW PDBS;
+	(To make sure your database is open. You should see the status as READ WRITE.)
+
+If the status is MOUNTED, open it by running:
+
+		ALTER PLUGGABLE DATABASE ORCLPDB OPEN;		
+	Verify that the status is now READ WRITE.
+
+Create a New User
+		CREATE USER company IDENTIFIED BY 123;  		
+	(123 is the password for the user company.)
+
+Grant Login Permission.
+
+		GRANT CREATE SESSION TO company;   			
+	Grant Table Creation Privileges
+
+Since we are going to create tables, run the following commands to avoid future space-related errors:
+
+		GRANT CREATE TABLE TO company;
+
+Then:
+
+		ALTER USER company QUOTA UNLIMITED ON USERS;
+
+	(This gives the user unlimited space in the USERS tablespace.)
+
+Second Step: Create a New Connection in SQL Developer
+Open Oracle SQL Developer.
+>> Click New Connection.
+Enter:
+Username: company
+Password: 123
+Service Name: orclpdb
+Click Test.
+If the status shows Success, click Connect.
+--------------------------------------------------------------------------------------------------------------------------------------------
+2 - Implement the DDL Concept (Table Creation) of the Company Project & Employee Management Tables. 
+#---------------------------------------------------
+CREATE TABLE Employee (
+    SSN NUMBER(10) PRIMARY KEY,
+    Birth_Date DATE,
+    Gender CHAR(1) NOT NULL,
+    Fname VARCHAR2(255) NOT NULL,
+    Lname VARCHAR2(255) NOT NULL
+);
+#--------------------------------------------------
+CREATE TABLE Locations (
+Location VARCHAR(255),
+DepartmentNumber NUMBER(10),
+
+PRIMARY KEY (Location,DepartmentNumber),
+
+FOREIGN KEY (DepartmentNumber)
+    REFERENCES Department(DepartmentNumber)
+);
+#----------------------------------------------------
+CREATE TABLE WorkingHours (
+SSN NUMBER(10),
+ProjectNumber NUMBER(10),
+Work_Hours NUMBER(3) NOT NULL,
+
+PRIMARY KEY (SSN, ProjectNumber),
+
+FOREIGN KEY (SSN)
+    REFERENCES Employee(SSN),
+    
+FOREIGN KEY (ProjectNumber)
+     REFERENCES Project(ProjectNumber)
+);
+#------------------------------------------------------
+CREATE TABLE Dependent(
+    DependentName VARCHAR2(255) PRIMARY KEY,
+    Birth_Date DATE,
+    Gender CHAR(1) NOT NULL
+);
+#-----------------------------------------------------
+CREATE TABLE Project (
+    ProjectNumber NUMBER(10) PRIMARY KEY,
+    ProjectName VARCHAR2(255) NOT NULL,
+    Location VARCHAR2(255) NOT NULL,
+    City VARCHAR2(255) NOT NULL
+);
+#---------------------------------------------------------
+CREATE TABLE Department (
+    DepartmentNumber NUMBER(10) PRIMARY KEY,
+    DepartmentName VARCHAR2(255) NOT NULL,
+    HireDate DATE NOT NULL
+);
