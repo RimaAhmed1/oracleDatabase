@@ -1,0 +1,90 @@
+1- COUNT – Count the total number of employees in the EMPLOYEES table, and the total number of departments in the DEPARTMENTS table.
+
+SELECT COUNT(*) AS Total_Employees
+FROM Employees;
+-----------------------
+SELECT COUNT(*) AS Total_Departments
+FROM Departments;
+---- subquery
+SELECT
+    (SELECT COUNT(*) FROM Employees) AS Total_Employees,
+    (SELECT COUNT(*) FROM Departments) AS Total_Departments
+FROM Dual;
+---------------------------------------------------------------------------------------
+
+2- SUM – Calculate the total salary of all employees, and the total commission percentage across the EMPLOYEES table.
+SELECT SUM(salary) AS Total_Salary
+FROM Employees;
+-----------------------
+SELECT SUM(Commission_Pct) AS Total_Commission
+FROM Employees;
+----------#subQuery
+SELECT
+    (SELECT SUM(salary) FROM Employees) AS Total_Salary,
+    (SELECT SUM(Commission_Pct) FROM Employees) AS Total_Commission
+FROM Dual;
+-----------------------------------------------------------------------------------------
+
+3- AVG – Find the average salary of all employees, and the average minimum and maximum salary from the JOBS table.
+SELECT AVG(salary) AS Average_Salary
+FROM Employees;
+-----------------------
+SELECT AVG(min_salary) AS Average_Minimum_Salary
+FROM jobs;
+-----------------------
+SELECT AVG(max_salary) AS Average_Maximum_Salary
+FROM jobs;
+----------#subQuery
+SELECT
+    (SELECT AVG(salary) FROM Employees) AS Average_Salary,
+    (SELECT AVG(min_salary) FROM jobs) AS Average_Minimum_Salary,
+    (SELECT AVG(max_salary) FROM jobs) AS Average_Maximum_Salary
+FROM Dual;
+-------------------------------------------------------------------------------------------------
+4- MAX & MIN – Retrieve the highest and lowest salary from the EMPLOYEES table, and the highest and lowest max salary from the JOBS table.
+
+SELECT MAX(salary) AS Highest_Salary
+FROM Employees;
+-----------------------
+SELECT MIN(salary) AS Lowest_Salary
+FROM Employees;
+-----------------------
+SELECT MAX(max_salary) AS highest_Max_Salary
+FROM jobs;
+------------------------
+SELECT MIN(max_salary) AS lowest_Max_Salary
+FROM jobs;
+----------#subQuery
+SELECT
+    (SELECT MAX(salary) FROM Employees) AS Highest_Salary,
+    (SELECT MIN(salary) FROM Employees) AS Lowest_Salary,
+    (SELECT MAX(max_salary) FROM jobs) AS highest_Max_Salary,
+    (SELECT MIN(max_salary) FROM jobs) AS lowest_Max_Salary
+FROM Dual;
+------------------------------------------------------------------------------------------------------------
+5- GROUP BY – Group employees by department ID and display the total number of employees per department. Group jobs by job title and show the average min and max salary per job.
+
+SELECT Department_ID,
+COUNT(*) AS Employee_Count
+FROM Employees
+GROUP BY Department_ID;
+---------
+SELECT job_title,
+AVG(min_salary) AS average_min_salary,
+AVG(max_salary) AS average_max_salary
+FROM Jobs
+GROUP BY job_title;
+------------------------------------------------------------
+6-HAVING – Filter grouped results to show only departments with more than 5 employees. Show only jobs where the average max salary exceeds a specific value.
+
+SELECT Department_ID,
+COUNT(Employee_ID) AS Employee_Count
+FROM Employees
+GROUP BY Department_ID
+HAVING COUNT(Employee_ID) > 5;
+---------------------
+SELECT Job_Title,
+AVG(Max_Salary) AS Avg_Max_Salary
+FROM Jobs
+GROUP BY Job_Title
+HAVING AVG(Max_Salary) > 10000;
