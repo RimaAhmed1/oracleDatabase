@@ -1,0 +1,31 @@
+INNER JOIN – Retrieve employees along with their department name and the projects they work on by joining EMPLOYEE, DEPARTMENT, and PROJECT tables.
+
+SELECT E.Fname, E.Lname, D.DepartmentName, P.ProjectName
+FROM Employee E INNER JOIN Department D
+    ON E.DepartmentNumber = D.DepartmentNumber
+INNER JOIN Project P
+    ON D.DepartmentNumber = P.DepartmentNumber;
+---------------------------------------------------------------
+LEFT JOIN – Display all employees with their department information and dependent details, including employees who have no dependents, by joining EMPLOYEE, DEPARTMENT, and DEPENDENT tables.
+
+SELECT E.Fname, E.Lname, D.DepartmentName, DP.DependentName
+FROM Employee E LEFT JOIN Department D
+    ON E.DepartmentNumber = D.DepartmentNumber
+LEFT JOIN Dependent DP
+    ON E.SSN = DP.SSN;
+-------------------------------------------------------------------
+RIGHT JOIN – Show all projects with their assigned department and the employees working on them, including projects with no assigned employees, by joining PROJECT, DEPARTMENT, and EMPLOYEE tables.
+
+SELECT P.ProjectName, D.DepartmentName, E.Fname, E.Lname
+FROM Employee E RIGHT JOIN Department D
+       ON E.DepartmentNumber = D.DepartmentNumber
+RIGHT JOIN Project P
+       ON D.DepartmentNumber = P.DepartmentNumber;
+-------------------------------------------------------------------------------------------------------------
+SELF JOIN – Retrieve each employee along with their supervisor's name and department by joining the EMPLOYEE table with itself alongside the DEPARTMENT table.
+
+SELECT E.Fname || ' ' || E.Lname AS Employee_Name, S.Fname || ' ' || S.Lname AS Supervisor_Name, D.DepartmentName
+FROM Employee E LEFT JOIN Employee S
+       ON E.Supervisour = S.SSN
+LEFT JOIN Department D
+       ON E.DepartmentNumber = D.DepartmentNumber;
