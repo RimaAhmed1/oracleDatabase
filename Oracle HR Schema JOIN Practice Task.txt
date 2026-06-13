@@ -1,0 +1,134 @@
+
+2. Employee & Department Reports
+Create SQL queries for:
+Employee ID, full name, and department name (employees with departments only).
+
+SELECT E.Employee_ID, E.First_Name || ' ' || E.Last_Name AS Full_Name, D.Department_Name
+FROM Employees E INNER JOIN Departments D
+  ON E.Department_ID = D.Department_ID;
+----------
+Employee full name, job title, and salary (employees with valid jobs only).
+
+SELECT E.First_Name || ' ' || E.Last_Name AS Full_Name, J.Job_Title, E.Salary
+FROM Employees E INNER JOIN Jobs J
+  ON E.Job_ID = J.Job_ID;
+-----------
+Employee, department, and department city.
+
+SELECT E.First_Name || ' ' || E.Last_Name AS Employee_Name, D.Department_Name, L.City
+FROM Employees E INNER JOIN Departments D
+    ON E.Department_ID = D.Department_ID
+INNER JOIN Locations L
+    ON D.Location_ID = L.Location_ID;
+-------------
+Employee, department, country, and region.
+
+SELECT E.First_Name || ' ' || E.Last_Name AS Employee_Name, D.Department_Name, C.Country_Name, R.Region_Name
+FROM Employees E INNER JOIN Departments D
+    ON E.Department_ID = D.Department_ID
+INNER JOIN Locations L
+    ON D.Location_ID = L.Location_ID
+INNER JOIN Countries C
+    ON L.Country_ID = C.Country_ID
+INNER JOIN Regions R
+    ON C.Region_ID = R.Region_ID;
+----------------------------------------------------------------------------------------------------------------------------
+3. Organization Structure Analysis
+Create reports for:
+5. Complete employee list including employees without departments.
+
+SELECT E.Employee_ID, E.First_Name || ' ' || E.Last_Name AS Employee_Name, D.Department_Name
+FROM Employees E LEFT JOIN Departments D
+    ON E.Department_ID = D.Department_ID;
+-------------
+6. Complete department list including departments without employees.
+
+SELECT D.Department_ID, D.Department_Name, E.First_Name || ' ' || E.Last_Name AS Employee_Name
+FROM Departments D LEFT JOIN Employees E
+    ON D.Department_ID = E.Department_ID;
+--------------
+7. Departments that currently have no employees assigned.
+
+SELECT D.Department_ID, D.Department_Name
+FROM Departments D LEFT JOIN Employees E
+    ON D.Department_ID = E.Department_ID
+WHERE E.Employee_ID IS NULL;
+-------------------------------------------------------------------------------------------------------------------------
+4. Management Hierarchy Analysis
+Create reports for:
+8. Employee name and direct manager name.
+
+SELECT E.First_Name || ' ' || E.Last_Name AS Employee_Name, M.First_Name || ' ' || M.Last_Name AS Manager_Name
+FROM Employees E LEFT JOIN Employees M
+    ON E.Manager_ID = M.Employee_ID;
+-------------------------
+9. Employees without managers and provide a brief explanation.
+
+SELECT Employee_ID, First_Name || ' ' || Last_Name AS Employee_Name
+FROM Employees
+WHERE Manager_ID IS NULL;
+-- brief explanation: Employees without managers are typically top-level executives such as the company president or CEO. Since they are at the highest level of the organizational hierarchy, they do not report to any other employee.
+------------------------------------------------------------------------------------------------------------------------
+5. Advanced Business Analysis
+Create reports for:
+10. Employees earning more than their managers.
+
+SELECT E.First_Name || ' ' || E.Last_Name AS Employee_Name, E.Salary AS Employee_Salary, M.First_Name || ' ' || M.Last_Name AS Manager_Name, M.Salary AS Manager_Salary
+FROM Employees E INNER JOIN Employees M
+    ON E.Manager_ID = M.Employee_ID
+WHERE E.Salary > M.Salary;
+---------------------
+11. Departments where the department manager works within the same department.
+
+SELECT D.Department_Name, E.First_Name || ' ' || E.Last_Name AS Manager_Name
+FROM Departments D INNER JOIN Employees E
+    ON D.Manager_ID = E.Employee_ID
+WHERE D.Department_ID = E.Department_ID;
+-----------------------------------------------------------------------------------------------------------------------
+6. Executive Dashboard Reports
+Create professional reports for:
+Employee, job title, department, city, and country.
+
+SELECT E.First_Name || ' ' || E.Last_Name AS Employee_Name, J.Job_Title, D.Department_Name, L.City, C.Country_Name
+FROM Employees E INNER JOIN Jobs J
+    ON E.Job_ID = J.Job_ID
+INNER JOIN Departments D
+    ON E.Department_ID = D.Department_ID
+INNER JOIN Locations L
+    ON D.Location_ID = L.Location_ID
+INNER JOIN Countries C
+    ON L.Country_ID = C.Country_ID;
+--------------------
+Department, manager, city, and country (including departments without managers).
+
+SELECT D.Department_Name, E.First_Name || ' ' || E.Last_Name AS Manager_Name, L.City, C.Country_Name
+FROM Departments D LEFT JOIN Employees E
+    ON D.Manager_ID = E.Employee_ID
+LEFT JOIN Locations L
+    ON D.Location_ID = L.Location_ID
+LEFT JOIN Countries C
+    ON L.Country_ID = C.Country_ID;
+--------------------
+Employees working in the same department as their manager.
+
+SELECT E.First_Name || ' ' || E.Last_Name AS Employee_Name, M.First_Name || ' ' || M.Last_Name AS Manager_Name, D.Department_Name
+FROM Employees E INNER JOIN Employees M
+    ON E.Manager_ID = M.Employee_ID
+INNER JOIN Departments D
+    ON E.Department_ID = D.Department_ID
+WHERE E.Department_ID = M.Department_ID;
+---------------------
+Employees whose managers work in different departments.
+
+SELECT E.First_Name || ' ' || E.Last_Name AS Employee_Name, M.First_Name || ' ' || M.Last_Name AS Manager_Name
+FROM Employees E INNER JOIN Employees M
+    ON E.Manager_ID = M.Employee_ID
+WHERE E.Department_ID <> M.Department_ID;
+----------------------
+Distinct countries containing company departments.
+
+SELECT DISTINCT C.Country_Name
+FROM Departments D INNER JOIN Locations L ON D.Location_ID = L.Location_ID
+INNER JOIN Countries C
+    ON L.Country_ID = C.Country_ID
+ORDER BY C.Country_Name;
