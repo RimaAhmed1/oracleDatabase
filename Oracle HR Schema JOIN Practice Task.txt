@@ -1,4 +1,161 @@
+Objective
+Build business reports using the Oracle HR Schema while demonstrating a strong understanding of table relationships, JOIN operations, and enterprise reporting requirements.
+Scope
+1. HR Database Exploration
+- Explore the Oracle HR schema.
+- Inspect the relevant tables.
+- Identify relationships and foreign keys.
+- Understand how employee information flows across the system.
+- Relevant tables:
+- EMPLOYEES
+- DEPARTMENTS
+- JOBS
+- LOCATIONS
+- COUNTRIES
+- REGIONS
 
+
+The Oracle HR Schema is designed to manage employee, department, job, and location information within an organization. It contains several related tables that support human resources reporting and organizational analysis.
+EMPLOYEES
++ Stores employee information such as:
+
+Employee ID
+First Name
+Last Name
+Email
+Hire Date
+Salary
+Job ID
+Manager ID
+Department ID
+
+Primary Key:
+
+EMPLOYEE_ID
+
+Foreign Keys:
+
+JOB_ID → JOBS.JOB_ID
+MANAGER_ID → EMPLOYEES.EMPLOYEE_ID
+DEPARTMENT_ID → DEPARTMENTS.DEPARTMENT_ID
+
+DEPARTMENTS
++ Stores department information.
+
+Attributes include:
+
+Department ID
+Department Name
+Manager ID
+Location ID
+
+Primary Key:
+
+DEPARTMENT_ID
+
+Foreign Keys:
+
+MANAGER_ID → EMPLOYEES.EMPLOYEE_ID
+LOCATION_ID → LOCATIONS.LOCATION_ID
+
+JOBS
++ Stores job information.
+
+Attributes include:
+
+Job ID
+Job Title
+Minimum Salary
+Maximum Salary
+
+Primary Key:
+
+JOB_ID
+
+LOCATIONS
++ Stores office location information.
+
+Attributes include:
+
+Location ID
+Street Address
+Postal Code
+City
+State Province
+Country ID
+
+Primary Key:
+
+LOCATION_ID
+
+Foreign Key:
+
+COUNTRY_ID → COUNTRIES.COUNTRY_ID
+
+COUNTRIES
++ Stores country information.
+
+Attributes include:
+
+Country ID
+Country Name
+Region ID
+
+Primary Key:
+
+COUNTRY_ID
+
+Foreign Key:
+
+REGION_ID → REGIONS.REGION_ID
+
+REGIONS
+Stores geographical region information.
+
+Attributes include:
+
+Region ID
+Region Name
+
+Primary Key:
+
+REGION_ID
+-------------------------
+# Relationships and Foreign Keys
+
+The EMPLOYEES table is related to the DEPARTMENTS table through the Department_ID column. Each employee belongs to one department.
+
+The EMPLOYEES table is related to the JOBS table through the Job_ID column. Each employee is assigned to one job.
+
+The EMPLOYEES table has a self-referencing relationship through the Manager_ID column. This relationship is used to identify the manager of each employee.
+
+The DEPARTMENTS table is related to the EMPLOYEES table through the Manager_ID column, which identifies the employee who manages the department.
+
+The DEPARTMENTS table is related to the LOCATIONS table through the Location_ID column. Each department operates in a specific location.
+
+The LOCATIONS table is related to the COUNTRIES table through the Country_ID column. Each location belongs to a country.
+
+The COUNTRIES table is related to the REGIONS table through the Region_ID column. Each country belongs to a specific geographical region.
+
+These relationships allow employee information to be connected with jobs, departments, locations, countries, and regions, which supports enterprise reporting and business analysis.
+
+-------------------------
+# Employee Information Flow
+
+Employee information flows through the HR system as follows:
+
+Each employee is assigned a job through the JOB_ID column.
+Each employee belongs to a department through the DEPARTMENT_ID column.
+Each department operates at a specific location through LOCATION_ID.
+Each location belongs to a country through COUNTRY_ID.
+Each country belongs to a geographical region through REGION_ID.
+Employees may report to another employee through the MANAGER_ID column, creating the organizational hierarchy.
+
+This structure enables business reporting at multiple levels, including employee, department, city, country, and regional analysis.
+
+Conclusion
+
+The Oracle HR Schema uses primary keys and foreign keys to maintain data integrity and support enterprise reporting. Understanding these relationships is essential for writing accurate JOIN queries, creating analytical reports, and performing business intelligence analysis.
 2. Employee & Department Reports
 Create SQL queries for:
 Employee ID, full name, and department name (employees with departments only).
