@@ -1,0 +1,167 @@
+# log.txt – Error Log and Resolutions
+
+## Error 1: ORA-02270
+
+### Message
+
+text
+ORA-02270: no matching unique or primary key for this column-list
+
+
+### Cause
+
+A foreign key in the REQUIREMENTS table referenced QUALIFICATION(qual_ID), but QUAL_ID was not defined as a standalone primary key or unique key at that stage.
+
+### Resolution
+
+The QUALIFICATION table was modified so that QUAL_ID became the primary key before creating the foreign key relationship.
+
+---
+
+## Error 2: ORA-00955
+
+### Message
+
+text
+ORA-00955: name is already used by an existing object
+
+
+### Cause
+
+An attempt was made to create the sequence QUAL_ID_SEQ when it already existed.
+
+### Resolution
+
+The existing sequence was reused instead of creating a duplicate object.
+
+---
+
+## Error 3: ORA-01776
+
+### Message
+
+text
+ORA-01776: cannot modify more than one base table through a join view
+
+
+### Cause
+
+An INSERT statement was executed against VW_EMPLOYEE_SUMMARY, which was created using multiple joined tables.
+
+### Resolution
+
+The insert operation was performed directly on the base tables instead of the view.
+
+---
+
+## Error 4: ORA-01031
+
+### Message
+
+text
+ORA-01031: insufficient privileges
+
+
+### Cause
+
+The user did not have the required privilege to create database views or scheduler jobs.
+
+### Resolution
+
+Administrative privileges were required, such as CREATE VIEW or CREATE JOB.
+
+---
+
+## Error 5: ORA-00001
+
+### Message
+
+text
+ORA-00001: unique constraint violated
+
+
+### Cause
+
+The EMP_SEQ sequence generated a value that already existed in EMPLOYEE.emp_ID.
+
+### Resolution
+
+The sequence was recreated starting after the current maximum employee ID.
+
+---
+
+## Error 6: ORA-20001
+
+### Message
+
+text
+ORA-20001: Email already exists
+
+
+### Cause
+
+The stored procedure SP_ADD_EMPLOYEE detected a duplicate email address.
+
+### Resolution
+
+A unique email address was supplied when inserting the employee.
+
+---
+
+## Error 7: ORA-27475
+
+### Message
+
+text
+ORA-27475: unknown job
+
+
+### Cause
+
+An attempt was made to drop a scheduler job that did not exist.
+
+### Resolution
+
+The job creation script was executed directly without dropping the non-existing job.
+
+---
+
+## Error 8: ORA-27486
+
+### Message
+
+text
+ORA-27486: insufficient privileges
+
+
+### Cause
+
+The current user lacked the CREATE JOB privilege required by DBMS_SCHEDULER.
+
+### Resolution
+
+The DBA granted the CREATE JOB privilege, after which the scheduler job executed successfully.
+
+---
+
+## Error 9: PLS-00103
+
+### Message
+
+text
+PLS-00103: Encountered the symbol "2"
+
+
+### Cause
+
+The INTERVAL syntax used in DBMS_SCHEDULER was incorrect.
+
+### Resolution
+
+The expression was replaced with:
+
+sql
+SYSTIMESTAMP + NUMTODSINTERVAL(2,'MINUTE')
+
+
+which executed successfully.
